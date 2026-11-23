@@ -1,0 +1,719 @@
+
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOTARIUS PRO</title>
+
+<style>
+:root {
+ --navy:#0b1730;
+ --blue:#142d50;
+ --gold:#d6ad55;
+ --white:#ffffff;
+ --bg:#f1f4f9;
+ --text:#19283e;
+}
+* {box-sizing:border-box}
+body {
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+}
+header {
+ background:linear-gradient(120deg,#08152d,#1c3d68);
+ color:white;
+ padding:20px;
+ text-align:center;
+ border-bottom:3px solid var(--gold);
+}
+header h1 {
+ margin:0;
+ color:var(--gold);
+ letter-spacing:2px;
+ font-size:25px;
+}
+header p {
+ margin:7px 0 0;
+ font-size:11px;
+ letter-spacing:2px;
+}
+.top {
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:12px;
+ background:var(--navy);
+ color:white;
+}
+button {
+ border:0;
+ border-radius:8px;
+ padding:11px 15px;
+ cursor:pointer;
+ font-weight:bold;
+}
+.gold {
+ background:var(--gold);
+ color:#10203a;
+}
+.dark {
+ background:var(--blue);
+ color:white;
+}
+.light {
+ background:#e9eef6;
+ color:#142d50;
+}
+nav {
+ display:flex;
+ overflow-x:auto;
+ gap:7px;
+ padding:12px;
+ background:white;
+}
+nav button {
+ white-space:nowrap;
+ background:#eaf0f8;
+ color:var(--navy);
+}
+nav button.active {
+ background:var(--navy);
+ color:var(--gold);
+}
+main {padding:15px}
+.page {display:none}
+.page.active {display:block}
+h2 {color:var(--navy)}
+.card {
+ background:white;
+ border-radius:13px;
+ padding:17px;
+ margin-bottom:13px;
+ box-shadow:0 4px 15px #0000000c;
+ border:1px solid #e6eaf0;
+}
+.stats {
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+.stat {
+ background:linear-gradient(135deg,#102443,#244a76);
+ color:white;
+ padding:17px;
+ border-radius:12px;
+}
+.stat strong {
+ display:block;
+ color:var(--gold);
+ font-size:27px;
+ margin-top:8px;
+}
+input,select,textarea {
+ width:100%;
+ padding:12px;
+ border:1px solid #d6deea;
+ border-radius:8px;
+ margin:6px 0 13px;
+ font-size:15px;
+ background:white;
+}
+label {
+ font-size:13px;
+ font-weight:bold;
+ color:#30435e;
+}
+textarea {min-height:90px}
+table {
+ width:100%;
+ border-collapse:collapse;
+ min-width:550px;
+}
+th,td {
+ border-bottom:1px solid #e3e8ef;
+ padding:11px;
+ text-align:left;
+ font-size:13px;
+}
+th {
+ background:#eef2f7;
+ color:#193252;
+}
+.tablebox {overflow-x:auto}
+.row {
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+}
+.row button {margin:3px 0}
+.goldline {
+ height:2px;
+ background:var(--gold);
+ margin:12px 0;
+}
+.notice {
+ background:#fff6df;
+ border-left:4px solid var(--gold);
+ padding:12px;
+ font-size:12px;
+ line-height:1.5;
+ border-radius:5px;
+}
+footer {
+ text-align:center;
+ padding:25px;
+ color:#758399;
+ font-size:11px;
+}
+@media(min-width:750px) {
+ main {max-width:1100px;margin:auto}
+ .stats {grid-template-columns:repeat(4,1fr)}
+}
+@media print {
+ header,nav,.no-print,footer {display:none}
+ .page {display:none!important}
+ #printArea {display:block!important}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <h1>⚖ NOTARIUS PRO</h1>
+ <p>PROFESSIONAL NOTARY OFFICE SYSTEM</p>
+</header>
+
+<div class="top">
+ <span id="date"></span>
+ <button class="gold" onclick="changeLang()" id="lang">РУС</button>
+</div>
+
+<nav>
+ <button class="active" onclick="showPage('home',this)">⌂ Башкы бет</button>
+ <button onclick="showPage('clients',this)">♙ Кардарлар</button>
+ <button onclick="showPage('documents',this)">▤ Документтер</button>
+ <button onclick="showPage('registry',this)">▥ Реестр</button>
+ <button onclick="showPage('payments',this)">₸ Төлөмдөр</button>
+ <button onclick="showPage('settings',this)">⚙ Орнотуулар</button>
+</nav>
+
+<main>
+
+<!-- БАШКЫ БЕТ -->
+<section id="home" class="page active">
+ <h2>Башкаруу панели</h2>
+ <div class="notice">
+ Бул программа нотариалдык кеңсенин ички ишин
+ башкаруу жана документтердин долбоорлорун даярдоо үчүн.
+ Расмий нотариалдык аракеттерди ыйгарым укуктуу
+ нотариус гана жүргүзөт.
+ </div>
+
+ <div class="goldline"></div>
+
+ <div class="stats">
+  <div class="stat">
+   Кардарлар
+   <strong id="countClients">0</strong>
+  </div>
+  <div class="stat">
+   Документтер
+   <strong id="countDocs">0</strong>
+  </div>
+  <div class="stat">
+   Реестр
+   <strong id="countReg">0</strong>
+  </div>
+  <div class="stat">
+   Киреше
+   <strong id="countMoney">0</strong>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>Тез аракеттер</h3>
+  <div class="row">
+   <button class="gold" onclick="showPage('clients')">
+    + Кардар кошуу
+   </button>
+   <button class="dark" onclick="showPage('documents')">
+    + Документ түзүү
+   </button>
+   <button class="light" onclick="showPage('registry')">
+    Реестрди ачуу
+   </button>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>Акыркы документтер</h3>
+  <div class="tablebox">
+   <table>
+    <thead>
+     <tr><th>№</th><th>Кардар</th><th>Дата</th></tr>
+    </thead>
+    <tbody id="recent"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<!-- КАРДАРЛАР -->
+<section id="clients" class="page">
+ <h2>Кардарларды каттоо</h2>
+
+ <div class="card">
+  <label>Толук аты-жөнү</label>
+  <input id="cname" placeholder="Фамилия Имя Отчество">
+
+  <label>Паспорт номери</label>
+  <input id="passport" placeholder="ID / AN номер">
+
+  <label>ИНН / ПИН</label>
+  <input id="pin" placeholder="ИНН">
+
+  <label>Телефон</label>
+  <input id="phone" placeholder="+996">
+
+  <label>Жашаган дареги</label>
+  <input id="address" placeholder="Дарек">
+
+  <button class="gold" onclick="addClient()">КАРДАРДЫ САКТОО</button>
+ </div>
+
+ <div class="card">
+  <h3>Кардарлардын тизмеси</h3>
+  <input placeholder="Издөө..." oninput="searchClients(this.value)">
+  <div class="tablebox">
+   <table>
+    <thead>
+     <tr>
+      <th>Аты-жөнү</th>
+      <th>Паспорт</th>
+      <th>Телефон</th>
+      <th>Аракет</th>
+     </tr>
+    </thead>
+    <tbody id="clientList"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<!-- ДОКУМЕНТТЕР -->
+<section id="documents" class="page">
+ <h2>Документтерди оформление</h2>
+
+ <div class="card">
+  <label>Документтин түрү</label>
+  <select id="dtype">
+   <option>Ишеним кат / Доверенность</option>
+   <option>Сатып алуу-сатуу келишими</option>
+   <option>Кыймылсыз мүлк</option>
+   <option>Жер тилкеси</option>
+   <option>Макулдук / Согласие</option>
+   <option>Мурас / Наследство</option>
+   <option>Башка документ</option>
+  </select>
+
+  <label>Кардар</label>
+  <select id="dclient"></select>
+
+  <label>Экинчи тарап</label>
+  <input id="other" placeholder="Экинчи тараптын аты-жөнү">
+
+  <label>Дата</label>
+  <input type="date" id="ddate">
+
+  <label>Кызмат акысы (сом)</label>
+  <input type="number" id="fee" value="0">
+
+  <label>Документтин мазмуну</label>
+  <textarea id="details" placeholder="Маалыматтарды жазыңыз..."></textarea>
+
+  <button class="gold" onclick="addDocument()">ДОКУМЕНТ ТҮЗҮҮ</button>
+ </div>
+
+ <div class="card">
+  <h3>Даярдалган документтер</h3>
+  <div class="tablebox">
+   <table>
+    <thead>
+     <tr>
+      <th>№</th>
+      <th>Түрү</th>
+      <th>Кардар</th>
+      <th>Дата</th>
+      <th>Аракет</th>
+     </tr>
+    </thead>
+    <tbody id="docList"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<!-- РЕЕСТР -->
+<section id="registry" class="page">
+ <h2>Каттоо реестри</h2>
+ <div class="notice">
+ Бул кеңсенин ички реестри болуп саналат.
+ Мамлекеттик нотариалдык реестр эмес.
+ </div>
+ <div class="card">
+  <div class="tablebox">
+   <table>
+    <thead>
+     <tr>
+      <th>Реестр №</th>
+      <th>Кардар</th>
+      <th>Документ</th>
+      <th>Дата</th>
+      <th>Сумма</th>
+     </tr>
+    </thead>
+    <tbody id="registryList"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<!-- ТӨЛӨМДӨР -->
+<section id="payments" class="page">
+ <h2>Төлөмдөр жана эсеп</h2>
+
+ <div class="card">
+  <h3>Жаңы төлөм</h3>
+
+  <label>Кардар</label>
+  <select id="pclient"></select>
+
+  <label>Төлөмдүн максаты</label>
+  <input id="purpose" placeholder="Кызматтын аталышы">
+
+  <label>Сумма (сом)</label>
+  <input id="amount" type="number" placeholder="0">
+
+  <label>Дата</label>
+  <input id="pdate" type="date">
+
+  <button class="gold" onclick="addPayment()">ТӨЛӨМДҮ САКТОО</button>
+ </div>
+
+ <div class="card">
+  <h3>Төлөмдөрдүн тизмеси</h3>
+  <div class="tablebox">
+   <table>
+    <thead>
+     <tr>
+      <th>Кардар</th>
+      <th>Максаты</th>
+      <th>Дата</th>
+      <th>Сумма</th>
+     </tr>
+    </thead>
+    <tbody id="paymentList"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<!-- ОРНОТУУЛАР -->
+<section id="settings" class="page">
+ <h2>Система орнотуулары</h2>
+
+ <div class="card">
+  <h3>Нотариалдык кеңсе</h3>
+
+  <label>Кеңсенин аталышы</label>
+  <input id="office" value="NOTARIUS PRO">
+
+  <label>Нотариустун аты-жөнү</label>
+  <input id="notary">
+
+  <label>Телефон</label>
+  <input id="officePhone">
+
+  <label>Дарек</label>
+  <input id="officeAddress">
+
+  <button class="gold" onclick="saveSettings()">САКТОО</button>
+ </div>
+
+ <div class="card">
+  <h3>Маалыматтарды башкаруу</h3>
+  <button class="dark" onclick="backup()">JSON КӨЧҮРМӨСҮН ЖҮКТӨӨ</button>
+  <br><br>
+  <input type="file" id="restoreFile" accept=".json" onchange="restore(event)">
+  <button class="light" onclick="window.print()">БАСЫП ЧЫГАРУУ</button>
+ </div>
+</section>
+
+<footer>
+ NOTARIUS PRO © 2026
+ <br>Professional Office Management
+</footer>
+
+</main>
+
+<script>
+
+// БАЗА
+let clients = JSON.parse(localStorage.getItem("np_clients")||"[]");
+let docs = JSON.parse(localStorage.getItem("np_docs")||"[]");
+let payments = JSON.parse(localStorage.getItem("np_payments")||"[]");
+let settings = JSON.parse(localStorage.getItem("np_settings")||"{}");
+
+function saveAll(){
+ localStorage.setItem("np_clients",JSON.stringify(clients));
+ localStorage.setItem("np_docs",JSON.stringify(docs));
+ localStorage.setItem("np_payments",JSON.stringify(payments));
+ localStorage.setItem("np_settings",JSON.stringify(settings));
+ render();
+}
+
+function showPage(id,btn){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ render();
+}
+
+function addClient(){
+ let name=document.getElementById("cname").value.trim();
+ if(!name){alert("Аты-жөнүн жазыңыз");return}
+ clients.push({
+  id:Date.now(),
+  name,
+  passport:document.getElementById("passport").value,
+  pin:document.getElementById("pin").value,
+  phone:document.getElementById("phone").value,
+  address:document.getElementById("address").value
+ });
+ ["cname","passport","pin","phone","address"].forEach(id=>document.getElementById(id).value="");
+ saveAll();
+}
+
+function deleteClient(id){
+ if(confirm("Кардарды өчүрөсүзбү?")){
+  clients=clients.filter(c=>c.id!==id);
+  saveAll();
+ }
+}
+
+function searchClients(q){
+ renderClients(q);
+}
+
+function renderClients(q=""){
+ let list=clients.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+ document.getElementById("clientList").innerHTML=list.map(c=>`
+ <tr>
+ <td>${safe(c.name)}</td>
+ <td>${safe(c.passport)}</td>
+ <td>${safe(c.phone)}</td>
+ <td><button class="light" onclick="deleteClient(${c.id})">Өчүрүү</button></td>
+ </tr>`).join("");
+}
+
+function addDocument(){
+ let clientId=document.getElementById("dclient").value;
+ let client=clients.find(c=>String(c.id)===clientId);
+ if(!client){alert("Адегенде кардарды тандаңыз");return}
+ let doc={
+  id:Date.now(),
+  number:"NP-"+String(docs.length+1).padStart(5,"0"),
+  type:document.getElementById("dtype").value,
+  client:client.name,
+  clientId:client.id,
+  other:document.getElementById("other").value,
+  date:document.getElementById("ddate").value,
+  fee:Number(document.getElementById("fee").value),
+  details:document.getElementById("details").value
+ };
+ docs.unshift(doc);
+ saveAll();
+ alert("Документтин долбоору сакталды");
+}
+
+function deleteDoc(id){
+ if(confirm("Документти өчүрөсүзбү?")){
+  docs=docs.filter(d=>d.id!==id);
+  saveAll();
+ }
+}
+
+function printDoc(id){
+ let d=docs.find(x=>x.id===id);
+ let s=settings;
+ let w=window.open("","_blank");
+ if(!w){alert("Браузерде калкыма терезеге уруксат бериңиз");return}
+ w.document.write(`
+ <html><head><meta charset="UTF-8">
+ <title>Документ ${d.number}</title>
+ <style>body{font-family:Arial;padding:35px;line-height:1.7}
+ h2{text-align:center}hr{margin:25px 0}
+ </style></head><body>
+ <h2>${safe(s.office||"NOTARIUS PRO")}</h2>
+ <p>ДОКУМЕНТТИН ДОЛБООРУ</p><hr>
+ <h3>${safe(d.type)}</h3>
+ <p>Ички №: ${safe(d.number)}</p>
+ <p>Дата: ${safe(d.date)}</p>
+ <p>Кардар: ${safe(d.client)}</p>
+ <p>Экинчи тарап: ${safe(d.other)}</p>
+ <p>Мазмуну: ${safe(d.details)}</p>
+ <p>Кызмат акысы: ${d.fee} сом</p>
+ <hr>
+ <p>Нотариус: ${safe(s.notary||"________________")}</p>
+ <br><br><p>Колу: ________________</p>
+ <p style="font-size:11px">Ички долбоор. Расмий нотариалдык документ эмес.</p>
+ <script>window.onload=()=>window.print()<\/script>
+ </body></html>`);
+ w.document.close();
+}
+
+function addPayment(){
+ let id=document.getElementById("pclient").value;
+ let c=clients.find(x=>String(x.id)===id);
+ let amount=Number(document.getElementById("amount").value);
+ if(!c||amount<=0){alert("Кардарды жана сумманы туура киргизиңиз");return}
+ payments.unshift({
+  id:Date.now(),
+  client:c.name,
+  purpose:document.getElementById("purpose").value,
+  date:document.getElementById("pdate").value,
+  amount
+ });
+ saveAll();
+}
+
+function saveSettings(){
+ settings={
+  office:document.getElementById("office").value,
+  notary:document.getElementById("notary").value,
+  phone:document.getElementById("officePhone").value,
+  address:document.getElementById("officeAddress").value
+ };
+ saveAll();
+ alert("Маалымат сакталды");
+}
+
+function backup(){
+ let data={clients,docs,payments,settings};
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ let a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="NOTARIUS_PRO_BACKUP.json";
+ a.click();
+ URL.revokeObjectURL(a.href);
+}
+
+function restore(e){
+ let file=e.target.files[0];
+ if(!file)return;
+ let reader=new FileReader();
+ reader.onload=function(){
+  try{
+   let d=JSON.parse(reader.result);
+   if(!Array.isArray(d.clients)||!Array.isArray(d.docs)||!Array.isArray(d.payments))throw Error();
+   clients=d.clients;
+   docs=d.docs;
+   payments=d.payments;
+   settings=d.settings||{};
+   saveAll();
+   loadSettings();
+   alert("Маалымат калыбына келтирилди");
+  }catch(err){alert("Файл туура эмес")}
+ };
+ reader.readAsText(file);
+}
+
+function safe(s){
+ return String(s||"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+function render(){
+ document.getElementById("countClients").textContent=clients.length;
+ document.getElementById("countDocs").textContent=docs.length;
+ document.getElementById("countReg").textContent=docs.length;
+ document.getElementById("countMoney").textContent=
+ payments.reduce((s,p)=>s+p.amount,0).toLocaleString("ru-RU");
+
+ renderClients();
+
+ document.getElementById("dclient").innerHTML=
+ clients.map(c=>`<option value="${c.id}">${safe(c.name)}</option>`).join("");
+
+ document.getElementById("pclient").innerHTML=
+ clients.map(c=>`<option value="${c.id}">${safe(c.name)}</option>`).join("");
+
+ document.getElementById("docList").innerHTML=docs.map(d=>`
+ <tr>
+ <td>${safe(d.number)}</td>
+ <td>${safe(d.type)}</td>
+ <td>${safe(d.client)}</td>
+ <td>${safe(d.date)}</td>
+ <td>
+ <button class="gold" onclick="printDoc(${d.id})">PDF / Басуу</button>
+ <button class="light" onclick="deleteDoc(${d.id})">Өчүрүү</button>
+ </td></tr>`).join("");
+
+ document.getElementById("registryList").innerHTML=docs.map(d=>`
+ <tr>
+ <td>${safe(d.number)}</td>
+ <td>${safe(d.client)}</td>
+ <td>${safe(d.type)}</td>
+ <td>${safe(d.date)}</td>
+ <td>${d.fee}</td>
+ </tr>`).join("");
+
+ document.getElementById("paymentList").innerHTML=payments.map(p=>`
+ <tr>
+ <td>${safe(p.client)}</td>
+ <td>${safe(p.purpose)}</td>
+ <td>${safe(p.date)}</td>
+ <td>${p.amount} сом</td>
+ </tr>`).join("");
+
+ document.getElementById("recent").innerHTML=docs.slice(0,5).map(d=>`
+ <tr><td>${safe(d.number)}</td>
+ <td>${safe(d.client)}</td>
+ <td>${safe(d.date)}</td></tr>`).join("");
+}
+
+function loadSettings(){
+ document.getElementById("office").value=settings.office||"NOTARIUS PRO";
+ document.getElementById("notary").value=settings.notary||"";
+ document.getElementById("officePhone").value=settings.phone||"";
+ document.getElementById("officeAddress").value=settings.address||"";
+}
+
+let russian=false;
+function changeLang(){
+ russian=!russian;
+ document.getElementById("lang").textContent=russian?"КЫР":"РУС";
+ alert(russian?
+ "Русский интерфейс выбран. Полная локализация будет добавлена в следующей версии.":
+ "Кыргызский интерфейс");
+}
+
+document.getElementById("date").textContent=
+ new Date().toLocaleDateString("ru-RU");
+
+document.getElementById("ddate").value=new Date().toISOString().slice(0,10);
+document.getElementById("pdate").value=new Date().toISOString().slice(0,10);
+
+loadSettings();
+render();
+
+</script>
+</body>
+</html>
